@@ -1,7 +1,7 @@
-package estructura;
+package backend.base;
 
 import java.util.Arrays;
-
+ 
 public class Queue<ELEMENT> {
  
     //region Constants

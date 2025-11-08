@@ -1,7 +1,7 @@
-package estructura;
+package backend.interfaces;
 
 public interface ILinkedList<ELEMENT> extends Iterable<ELEMENT> {
-	 
+ 
     // Returns the number of elements in this list.
     public int size();
  

@@ -1,8 +1,8 @@
-package estructura;
+package backend.base;
 
 public class BinaryTree<ELEMENT> {
-	 
-	 
+ 
+ 
     //region Binary Tree Node Class
  
     protected class BTNode<ELEMENT> {

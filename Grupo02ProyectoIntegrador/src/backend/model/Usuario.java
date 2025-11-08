@@ -1,4 +1,4 @@
-package modelo;
+package backend.model;
 
 public class Usuario {
     private int numeroUsuario;

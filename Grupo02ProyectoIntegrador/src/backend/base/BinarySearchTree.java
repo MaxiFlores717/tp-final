@@ -1,8 +1,8 @@
-package estructura;
+package backend.base;
 
 public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends BinaryTree<ELEMENT> {
-	 
-	 
+ 
+ 
     public BinarySearchTree() {
         super();
     }
@@ -134,3 +134,4 @@ public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends Binar
     }
  
 }
+ 

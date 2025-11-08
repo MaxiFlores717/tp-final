@@ -1,4 +1,4 @@
-package modelo;
+package backend.model;
 
 public class Libro {
     private int codigo;

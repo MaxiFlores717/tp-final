@@ -1,4 +1,4 @@
-package estructura;
+package backend.interfaces;
 
 public interface ILinkedOrderedList<ELEMENT> {
 	 
