@@ -1,6 +1,6 @@
 package backend.model;
 
-public class Libro {
+public class Libro implements Comparable<Libro> {
     private int codigo;
     private String titulo;
     private String autor;
@@ -44,6 +44,11 @@ public class Libro {
     public void setDisponible(boolean disponible) {
         this.disponible = disponible;
     }
+    @Override
+    public int compareTo(Libro otro) {
+        return Integer.compare(this.codigo, otro.codigo);
+    }
+    
     @Override
     public String toString() {
         return "Libro [codigo=" + codigo + ", titulo=" + titulo + ", autor=" + autor + ", precio=" + precio
