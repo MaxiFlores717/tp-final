@@ -256,7 +256,7 @@ public class Main {
         DoubleLinkedList<Usuario> listaUsuarios = new DoubleLinkedList<>();
         int cantidadLibrosPrestados = Helper.getPositiveInteger(input, "Ingrese la Cantidada de Libros Prestados: ");
         for(int i = 0; i < arregloUsuarios.length; i++){
-            if(arregloUsuarios[i] != null && arregloUsuarios[i].getCantidadLibrosPrestados() > cantidadLibrosPrestados){
+            if(arregloUsuarios[i] != null && arregloUsuarios[i].getCantidadLibrosPrestados() >= cantidadLibrosPrestados){
                 listaUsuarios.addFirst(arregloUsuarios[i]);
             }
         }
