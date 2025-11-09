@@ -54,7 +54,7 @@ public class Main {
                     // Reversion de operaciones 
                     break;
                 case 8:
-                    // Atencion de pendientes 
+                    atenderPendientes(pendientes, arregloLibros, cantidadLibros, acciones);
                     break;
                 case 9:
                     // Mostrar todos los libros 
