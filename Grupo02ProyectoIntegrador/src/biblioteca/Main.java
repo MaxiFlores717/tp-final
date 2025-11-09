@@ -69,7 +69,15 @@ public class Main {
                     // Lista de libros por autor 
                     break;
                 case 13:
-                    // Lista de usuarios con cantidad de libros prestados 
+                    DoubleLinkedList<Usuario> usuariosConLibrosPrestados = listarUsuariosConLibrosPrestados(arregloUsuarios);
+                    if(usuariosConLibrosPrestados.size() == 0){
+                        System.out.println("No hay Usuarios con esa Cantidad de Libros Prestados. ");
+                    }else{
+                        System.out.println("Usuarios con mas Libros Prestados");
+                        for (Usuario usuario : usuariosConLibrosPrestados) {
+                            System.out.println(usuario.toString());
+                        }
+                    }
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
@@ -163,7 +171,7 @@ public class Main {
     }
 
     //Metodo 8: Atencion a Pendientes
-    public static void atenderPendientes(Queue<Usuario> pendientes, Libro[] arregloLibros, int cantidadLibros, StackGenerica<Operacion> acciones){
+    private static void atenderPendientes(Queue<Usuario> pendientes, Libro[] arregloLibros, int cantidadLibros, StackGenerica<Operacion> acciones){
         Scanner input = new Scanner(System.in);
         if(pendientes.isEmpty()){
             System.out.println("No hay usuarios en la cola de espera. ");
@@ -171,7 +179,7 @@ public class Main {
         }
 
         int numeroUsuario = Helper.getPositiveInteger(input, "Ingrese el Numero del Usuario: ");
-        Queue<Usuario> auxiliar = new Queue<Usuario>();
+        Queue<Usuario> auxiliar = new Queue<>();
         Usuario encontrado = null;
         while(!pendientes.isEmpty()){
             Usuario usuario = pendientes.remove();
@@ -240,6 +248,20 @@ public class Main {
         }
         
         System.out.println("--- Fin del listado ---");
+    }
+
+    //Metodo 13: Listar Usuarios que se Prestaron una x cantidad de Libros
+    private static DoubleLinkedList<Usuario> listarUsuariosConLibrosPrestados(Usuario[] arregloUsuarios){
+        Scanner input = new Scanner(System.in);
+        DoubleLinkedList<Usuario> listaUsuarios = new DoubleLinkedList<>();
+        int cantidadLibrosPrestados = Helper.getPositiveInteger(input, "Ingrese la Cantidada de Libros Prestados: ");
+        for(int i = 0; i < arregloUsuarios.length; i++){
+            if(arregloUsuarios[i] != null && arregloUsuarios[i].getCantidadLibrosPrestados() > cantidadLibrosPrestados){
+                listaUsuarios.addFirst(arregloUsuarios[i]);
+            }
+        }
+
+        return listaUsuarios;
     }
 }
 
