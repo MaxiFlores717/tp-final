@@ -8,8 +8,7 @@ public class Usuario {
     private String telefono;
     private int cantidadLibrosPrestados;
     
-    public Usuario(int numeroUsuario, int dni, String nombre, String dirrecion, String telefono,
-            int cantidadLibrosPrestados) {
+    public Usuario(int numeroUsuario, int dni, String nombre, String dirrecion, String telefono,int cantidadLibrosPrestados) {
         this.numeroUsuario = numeroUsuario;
         this.dni = dni;
         this.nombre = nombre;

@@ -17,7 +17,7 @@ public class Main {
     
     // Estructuras de datos para usuarios
     private static Usuario[] arregloUsuarios = new Usuario[1000];
-    private static int cantidadUsuarios = 0;
+    private static int cantidadUsuarios =0;
     
     // Estructuras auxiliares
     private static StackGenerica<Operacion> acciones = new StackGenerica<>();
@@ -37,7 +37,7 @@ public class Main {
                     registrarLibro();
                     break;
                 case 2:
-                    // Registro de usuarios 
+                    registrarUsuario();
                     break;
                 case 3:
                     // Busqueda de libros 
@@ -64,7 +64,8 @@ public class Main {
                     mostrarTodosLosUsuarios();
                     break;
                 case 11:
-                    // Monto total de libros en prestamo 
+                	double montoTotalDeLibrosPrestados=mostrarMontoTotalLibrosPrestados(arregloLibros);
+                	System.out.println("El monto total al que ascienden los libros que se encuentran en prestamo es: "+ montoTotalDeLibrosPrestados);
                     break;
                 case 12:
                     // Lista de libros por autor 
@@ -190,6 +191,80 @@ public class Main {
         }
         
         System.out.println("--- Fin del listado ---");
+    }
+    //Metodo 2 Registro de Usuario
+    public static void registrarUsuario() {
+        System.out.println("----Registro de Usuarios:----");
+        int nuevos = Helper.validarEntero(sc, "Ingrese cuántos usuarios desea ingresar: ");
+        if (cantidadUsuarios + nuevos > arregloUsuarios.length) {
+            System.out.println("Error: no hay espacio suficiente para registrar " + nuevos + " usuarios.");
+            return;
+        }
+        for (int i = 0; i < nuevos; i++) {
+            System.out.println("Usuario " + (cantidadUsuarios + i + 1) + ":");
+            int numUsuario;
+            do {
+                numUsuario = random.nextInt(100) + 1;
+            } while (buscarUsuarioPorCodigoEnArreglo(numUsuario) != null);
+            
+            int dniUsuario = Helper.validarDni(sc, "Ingrese el DNI del Usuario: ");
+            while (buscarUsuarioPorDni(dniUsuario) != null) {
+                System.out.println("Ese DNI ya está registrado. Intente con otro.");
+                dniUsuario = Helper.validarDni(sc, "Ingrese el DNI del Usuario: ");
+            }
+            String nombreUsuario = Helper.validarString(sc, "Ingrese el Nombre del Usuario: ");
+            String direccionUsuario = Helper.validarString(sc, "Ingrese la Dirección del Usuario: ");
+            String telefonoUsuario = Helper.validarString(sc, "Ingrese el Teléfono del Usuario: ");
+            int cantidadLibrosPrestados = 0;
+
+            arregloUsuarios[cantidadUsuarios + i] = new Usuario(
+                numUsuario, dniUsuario, nombreUsuario, direccionUsuario, telefonoUsuario, cantidadLibrosPrestados
+            );
+        }
+
+        cantidadUsuarios += nuevos;
+        System.out.println("El Registro de los usuario esta completado.");
+    }
+
+
+    public static Usuario buscarUsuarioPorCodigoEnArreglo(int numUsuario) {
+    	for (int i = 0; i < cantidadUsuarios; i++) {
+            if (arregloUsuarios[i] != null && arregloUsuarios[i].getNumeroUsuario() == numUsuario) {
+                return arregloUsuarios[i];
+            }
+        }
+        return null;
+    }
+    public static Usuario buscarUsuarioPorDni(int dni) {
+        for (int i = 0; i < cantidadUsuarios; i++) {
+            if (arregloUsuarios[i] != null && arregloUsuarios[i].getDni() == dni) {
+                return arregloUsuarios[i];
+            }
+        }
+        return null;
+    }
+
+    //Metodo 11 mostrar el monto total de los libros que se encuentran en prestamo
+    public static double mostrarMontoTotalLibrosPrestados(Libro[] arregloLibros) {
+    	if(arregloLibros == null || arregloLibros.length == 0) {
+    		System.out.println("No hay libros registrados.");
+    		return 0;
+    	}
+    	double montoTotalLibros=0;
+    	int cantidadPrestados=0;
+    	for (Libro libro : arregloLibros) {
+    		if(libro != null && !libro.isDisponible()) {
+    			montoTotalLibros+= libro.getPrecio();
+    			cantidadPrestados++;
+    		}
+		}
+    	if(cantidadPrestados==0) {
+    		System.out.println("No se encontraron libros prestados.");
+    		return 0;
+    	}else {
+    		System.out.println("Los libros que se encuentran en estado de prestamos son: "+ cantidadPrestados);
+    		return montoTotalLibros;
+    	}
     }
 }
 
