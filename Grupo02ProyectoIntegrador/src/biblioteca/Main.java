@@ -33,55 +33,83 @@ public class Main {
 
             switch (opcion) {
                 case 1:
-                    registrarLibro();
-                    break;
+                    int opcionAuxiliar;
+                    do {
+                        mostrarSubMenu();
+                        opcionAuxiliar = Helper.getPositiveInteger(sc, "Ingrese una Opcion: ");
+                        switch (opcionAuxiliar) {
+                            case 1:
+                                registrarLibro();
+                                break;
+                            case 2:
+                                registrarUsuario();
+                                break;
+                            case 3:
+                                int codigoLibro = Helper.getPositiveInteger(sc,"Ingrese el código del libro: ");
+                                buscarLibro(codigoLibro);
+                                break;
+                            case 4:
+                                int codigoUsuario = Helper.getPositiveInteger(sc,"Ingrese el código del usuario: ");
+                                buscarUsuarioPorDni(codigoUsuario);
+                                break;
+                            case 5:
+                                System.out.println("Saliendo de Registro y Busqueda...");
+                                break;
+                            default:
+                                System.out.println("Opcion no Valida");;
+                        }
+                    } while (opcionAuxiliar != 5);
+                   break;
                 case 2:
-                    registrarUsuario();
-                    break;
-                case 3:
-                    int codigoLibro = Helper.getPositiveInteger(sc,"Ingrese el código del libro: ");
-                    buscarLibro(codigoLibro);
-                    break;
-                case 4:
-                    int codigoUsuario = Helper.getPositiveInteger(sc,"Ingrese el código del usuario: ");
-                    buscarUsuarioPorDni(codigoUsuario);
-                    break;
-                case 5:
                     prestamoDeLibros();
                     break;
-                case 6:
+                case 3:
                     devolverLibro(sc);
                     break;
-                case 7:
+                case 4:
                     reversionDeOperaciones();
                     break;
-                case 8:
+                case 5:
                     atenderPendientes(pendientes, arregloLibros, cantidadLibros, acciones);
                     break;
-                case 9:
-                    mostrarTodosLosLibros();
-                    break;
-                case 10:
-                    mostrarTodosLosUsuarios();
-                    break;
-                case 11:
-                	double montoTotalDeLibrosPrestados=mostrarMontoTotalLibrosPrestados(arregloLibros);
-                	System.out.println("El monto total al que ascienden los libros que se encuentran en prestamo es: "+ montoTotalDeLibrosPrestados);
-                    break;
-                case 12:
-                    String autor= Helper.validarString(sc,"Ingrese la subcadena del autor a buscar: "); 
-                    listarLibrosAutor(autor.toLowerCase());
-                    break;
-                case 13:
-                    DoubleLinkedList<Usuario> usuariosConLibrosPrestados = listarUsuariosConLibrosPrestados(arregloUsuarios);
-                    if(usuariosConLibrosPrestados.size() == 0){
-                        System.out.println("No hay Usuarios con esa Cantidad de Libros Prestados. ");
-                    }else{
-                        System.out.println("Usuarios con mas Libros Prestados");
-                        for (Usuario usuario : usuariosConLibrosPrestados) {
-                            System.out.println(usuario.toString());
+                case 6:
+                    int opcionSuplementaria;
+                    do {
+                        mostrarMenuDeConsultas();
+                        opcionSuplementaria = Helper.getPositiveInteger(sc, "Ingrese una Opcion: ");
+                        switch (opcionSuplementaria) {
+                            case 1:
+                                mostrarTodosLosLibros();
+                                break;
+                            case 2:
+                                mostrarTodosLosUsuarios();
+                                break;
+                            case 3:
+                                double montoTotalDeLibrosPrestados=mostrarMontoTotalLibrosPrestados(arregloLibros);
+                                System.out.println("El monto total al que ascienden los libros que se encuentran en prestamo es: "+ montoTotalDeLibrosPrestados);
+                                break;
+                            case 4:
+                                String autor= Helper.validarString(sc,"Ingrese la subcadena del autor a buscar: "); 
+                                listarLibrosAutor(autor.toLowerCase());
+                                break;
+                            case 5:
+                                DoubleLinkedList<Usuario> usuariosConLibrosPrestados = listarUsuariosConLibrosPrestados(arregloUsuarios);
+                                if(usuariosConLibrosPrestados.size() == 0){
+                                    System.out.println("No hay Usuarios con esa Cantidad de Libros Prestados. ");
+                                }else{
+                                    System.out.println("Usuarios con mas Libros Prestados");
+                                    for (Usuario usuario : usuariosConLibrosPrestados) {
+                                        System.out.println(usuario.toString());
+                                    }
+                                }
+                                break;
+                            case 6:
+                                System.out.println("Saliendo de Consultas...");
+                                break;
+                            default:
+                                System.out.println("Opcion no Valida");
                         }
-                    }
+                    } while (opcionSuplementaria != 6);
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
@@ -95,21 +123,35 @@ public class Main {
 
     private static void mostrarMenu() {
         System.out.println("=== SISTEMA DE GESTIÓN DE BIBLIOTECA ===");
+        System.out.println("1 - Registro y Busqueda de Datos");
+        System.out.println("2 - Préstamo de libros");
+        System.out.println("3 - Devolución de libros");
+        System.out.println("4 - Reversión de operaciones");
+        System.out.println("5 - Atención de pendientes");
+        System.out.println("6 - Consultas");
+        System.out.println("0 - Salir");
+        System.out.println("==========================================");
+    }
+
+    //SubMenu para Registro y Busqueda
+    private static void mostrarSubMenu(){
+        System.out.println("=== Registro y Busqueda de Datos ===");
         System.out.println("1 - Registro de libros");
         System.out.println("2 - Registro de usuarios");
         System.out.println("3 - Búsqueda de libros");
         System.out.println("4 - Búsqueda de usuario");
-        System.out.println("5 - Préstamo de libros");
-        System.out.println("6 - Devolución de libros");
-        System.out.println("7 - Reversión de operaciones");
-        System.out.println("8 - Atención de pendientes");
-        System.out.println("9 - Mostrar todos los libros de la biblioteca");
-        System.out.println("10 - Mostrar la información de todos los usuarios");
-        System.out.println("11 - Mostrar el monto total de los libros en préstamo");
-        System.out.println("12 - Crear lista con libros cuyo autor contenga una subcadena");
-        System.out.println("13 - Crear lista con usuarios que tienen cantidad igual o superior a x");
-        System.out.println("0 - Salir");
-        System.out.println("==========================================");
+        System.out.println("5 - Salir");
+    }
+
+    //Menu de Consultas
+    private static void mostrarMenuDeConsultas(){
+        System.out.println("=== Menu de Consultas ===");
+        System.out.println("1 - Mostrar todos los libros de la biblioteca");
+        System.out.println("2 - Mostrar la información de todos los usuarios");
+        System.out.println("3 - Mostrar el monto total de los libros en préstamo");
+        System.out.println("4 - Crear lista con libros cuyo autor contenga una subcadena");
+        System.out.println("5 - Crear lista con usuarios que tienen cantidad igual o superior a x");
+        System.out.println("6 - Salir");
     }
 
     // Método 1: Registro de libros
