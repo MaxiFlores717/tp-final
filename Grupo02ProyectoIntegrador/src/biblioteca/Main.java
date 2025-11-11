@@ -9,68 +9,69 @@ import java.util.Scanner;
 import java.util.Random;
 
 public class Main {
-    
+
     // Estructuras de datos para libros
     private static Libro[] arregloLibros = new Libro[1000];
     private static int cantidadLibros = 0;
     private static BinarySearchTree<Libro> arbolLibros = new BinarySearchTree<>();
-    
+
     // Estructuras de datos para usuarios
     private static Usuario[] arregloUsuarios = new Usuario[1000];
     private static int cantidadUsuarios = 0;
-    
+
     // Estructuras auxiliares
     private static StackGenerica<Operacion> acciones = new StackGenerica<>();
     private static Queue<Usuario> pendientes = new Queue<>();
-    
+
     private static Scanner sc = new Scanner(System.in);
     private static Random random = new Random();
-    
+
     public static void main(String[] args) {
         int opcion;
         do {
             mostrarMenu();
             opcion = Helper.getInteger("Seleccione una opción: ");
-            
+
             switch (opcion) {
                 case 1:
                     registrarLibro();
                     break;
                 case 2:
-                    // Registro de usuarios 
+                    // Registro de usuarios
                     break;
                 case 3:
-                    // Busqueda de libros 
+                    // Busqueda de libros
                     break;
                 case 4:
-                    // Busqueda de usuario 
+                    // Busqueda de usuario
+                    buscarUSuarios();
                     break;
                 case 5:
-                    // Prestamo de libros 
+                    // Prestamo de libros
                     break;
                 case 6:
-                    // Devolucion de libros 
+                    // Devolucion de libros
                     break;
                 case 7:
-                    // Reversion de operaciones 
+                    // Reversion de operaciones
                     break;
                 case 8:
-                    // Atencion de pendientes 
+                    // Atencion de pendientes
                     break;
                 case 9:
-                    // Mostrar todos los libros 
+                    // Mostrar todos los libros
                     break;
                 case 10:
                     mostrarTodosLosUsuarios();
                     break;
                 case 11:
-                    // Monto total de libros en prestamo 
+                    // Monto total de libros en prestamo
                     break;
                 case 12:
-                    // Lista de libros por autor 
+                    // Lista de libros por autor
                     break;
                 case 13:
-                    // Lista de usuarios con cantidad de libros prestados 
+                    // Lista de usuarios con cantidad de libros prestados
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
@@ -79,9 +80,9 @@ public class Main {
                     System.out.println("Opción no válida. Intente nuevamente.");
             }
         } while (opcion != 0);
-        
+
     }
-    
+
     private static void mostrarMenu() {
         System.out.println("=== SISTEMA DE GESTIÓN DE BIBLIOTECA ===");
         System.out.println("1 - Registro de libros");
@@ -100,11 +101,11 @@ public class Main {
         System.out.println("0 - Salir");
         System.out.println("==========================================");
     }
-    
+
     // Método 1: Registro de libros
     private static void registrarLibro() {
         System.out.println("=== REGISTRO DE LIBRO ===");
-        
+
         // Generar codigo aleatorio unico
         int codigo;
         boolean codigoUnico = false;
@@ -114,31 +115,31 @@ public class Main {
                 codigoUnico = true;
             }
         } while (!codigoUnico);
-        
+
         System.out.println("Codigo generado automaticamente: " + codigo);
-        
+
         // Solicitar datos del libro
         System.out.print("Ingrese el titulo del libro: ");
         String titulo = sc.nextLine();
-        
+
         System.out.print("Ingrese el autor del libro: ");
         String autor = sc.nextLine();
-        
+
         double precio = Helper.getPositiveDouble(sc, "Ingrese el precio del libro: ");
-        
+
         // Crear el libro con disponible = true
         Libro nuevoLibro = new Libro(codigo, titulo, autor, precio, true);
-        
+
         // Verificar que hay espacio en el arreglo
         if (cantidadLibros >= arregloLibros.length) {
             System.out.println("Error: No hay espacio disponible en el arreglo de libros.");
             return;
         }
-        
+
         // Agregar al arreglo
         arregloLibros[cantidadLibros] = nuevoLibro;
         cantidadLibros++;
-        
+
         // Agregar al arbol binario de busqueda
         try {
             arbolLibros.add(nuevoLibro);
@@ -151,9 +152,12 @@ public class Main {
             arregloLibros[cantidadLibros] = null;
             System.out.println("Error al registrar el libro en el árbol: " + e.getMessage());
         }
+
+        System.out.println(arbolLibros.toString());
     }
-    
-    // Metodo auxiliar para buscar un libro por codigo en el arreglo (para verificar unicidad)
+
+    // Metodo auxiliar para buscar un libro por codigo en el arreglo (para verificar
+    // unicidad)
     private static Libro buscarLibroPorCodigoEnArreglo(int codigo) {
         for (int i = 0; i < cantidadLibros; i++) {
             if (arregloLibros[i] != null && arregloLibros[i].getCodigo() == codigo) {
@@ -162,19 +166,19 @@ public class Main {
         }
         return null;
     }
-    
+
     // Metodo 10: Mostrar la informacion de todos los usuarios
     private static void mostrarTodosLosUsuarios() {
         System.out.println("LISTADO DE TODOS LOS USUARIOS");
-        
+
         if (cantidadUsuarios == 0) {
             System.out.println("No hay usuarios registrados en la biblioteca.");
             return;
         }
-        
+
         System.out.println("Total de usuarios: " + cantidadUsuarios);
         System.out.println("--- Informacion de Usuarios ---");
-        
+
         for (int i = 0; i < cantidadUsuarios; i++) {
             Usuario usuario = arregloUsuarios[i];
             if (usuario != null) {
@@ -188,9 +192,58 @@ public class Main {
                 System.out.println();
             }
         }
-        
+
         System.out.println("--- Fin del listado ---");
     }
+
+    public static boolean buscarUSuarios() {
+        arregloUsuarios[0] = (new Usuario(0, 2112, "maxi", "puerto", "1331", 1));
+        arregloUsuarios[1] = (new Usuario(1, 2112, "aye", "puerto", "1331", 1));
+        arregloUsuarios[2] = (new Usuario(2, 2112, "jose", "puerto", "1331", 1));
+        arregloUsuarios[3] = (new Usuario(3, 2112, "juan", "puerto", "1331", 1));
+        cantidadUsuarios = 4;
+        System.out.println("BUSQUEDA DE USUARIO");
+
+        if (cantidadUsuarios == 0) {
+            System.out.println("No hay usuarios registrados en la biblioteca.");
+            return false;
+        }
+
+        System.out.println("Ingrese numero de usuario: ");
+        int leer = sc.nextInt();
+
+        for (int i = 0; i < cantidadUsuarios; i++) {
+            Usuario usuario = arregloUsuarios[i];
+            if (usuario.getNumeroUsuario() == leer) {
+                System.out.println("Usuario Encontrado: ");
+                System.out.println("Usuario #" + (i + 1) + ":");
+                System.out.println("  Numero de Usuario: " + usuario.getNumeroUsuario());
+                System.out.println("  DNI: " + usuario.getDni());
+                System.out.println("  Nombre: " + usuario.getNombre());
+                System.out.println("  Direccion: " + usuario.getDirrecion());
+                System.out.println("  Telefono: " + usuario.getTelefono());
+                System.out.println("  Cantidad de libros prestados: " + usuario.getCantidadLibrosPrestados());
+                System.out.println();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //metodo 6: devolucion libro
+    public static void realizarDevolucion() {
+
+        System.out.println("DEVOLUCION");
+
+        boolean usuarioEncontrado= buscarUSuarios();
+
+        //boolean libroEncontrado= buscarLibro();
+
+
+        
+
+         
+        
+    }
+
 }
-
-

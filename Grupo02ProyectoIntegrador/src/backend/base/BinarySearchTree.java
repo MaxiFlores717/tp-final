@@ -1,20 +1,20 @@
 package backend.base;
 
+import backend.model.Libro;
+
 public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends BinaryTree<ELEMENT> {
- 
- 
+
     public BinarySearchTree() {
         super();
     }
- 
- 
+
     public void add(ELEMENT item) {
         if (this.root == null) {
             this.root = new BTNode<ELEMENT>(item, null, null);
         } else {
             BTNode<ELEMENT> temp = this.root;
             BTNode<ELEMENT> prev = null;
-            while (temp != null ) {
+            while (temp != null) {
                 prev = temp;
                 if (item.compareTo(temp.item) < 0) {
                     temp = temp.left;
@@ -30,14 +30,12 @@ public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends Binar
             }
         }
     }
- 
- 
+
     public ELEMENT remove(ELEMENT item) {
         return removeByCopy(item);
-        //return removeByFusion(item);
+        // return removeByFusion(item);
     }
- 
- 
+
     private ELEMENT removeByCopy(ELEMENT item) {
         BTNode<ELEMENT> find = this.root;
         BTNode<ELEMENT> prev = null;
@@ -88,8 +86,7 @@ public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends Binar
         }
         return save;
     }
- 
- 
+
     private ELEMENT removeByFusion(ELEMENT item) {
         BTNode<ELEMENT> find = this.root;
         BTNode<ELEMENT> prev = null;
@@ -132,6 +129,21 @@ public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends Binar
         find.left = find.right = null;
         return save;
     }
- 
+
+    public ELEMENT buscar(ELEMENT item) {
+        BTNode<ELEMENT> temp = this.root;
+
+        while (temp != null) {
+            int cmp = item.compareTo(temp.item);
+            if (cmp == 0) {
+                return temp.item;
+            } else if (cmp < 0) {
+                temp = temp.left;
+            } else {
+                temp = temp.right;
+            }
+        }
+
+        return null;
+    }
 }
- 
