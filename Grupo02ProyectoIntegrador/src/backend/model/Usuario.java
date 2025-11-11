@@ -79,10 +79,15 @@ public class Usuario {
 
     //metodo decrementar para devolucion
     public void decrementarPrestamos() {
-    if (cantidadLibrosPrestados > 0) {
-      cantidadLibrosPrestados--;
+        if (cantidadLibrosPrestados > 0) {
+            cantidadLibrosPrestados--;
+        }
     }
-  }
+
+    //Metodo incrementar para prestamo
+    public void incrementarLibrosPrestados() {
+        this.cantidadLibrosPrestados++;
+    }
     
     
 }
