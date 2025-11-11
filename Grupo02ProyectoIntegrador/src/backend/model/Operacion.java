@@ -3,14 +3,15 @@ package backend.model;
 import java.time.LocalDate;
 
 public class Operacion {
+    private static int contador = 0;
     private int identificador;
     private String tipoOperacion;
     private Libro libro;
     private Usuario usuario;
     private LocalDate fecha;
     
-    public Operacion(int identificador, String tipoOperacion, Libro libro, Usuario usuario, LocalDate fecha) {
-        this.identificador = identificador;
+    public Operacion(String tipoOperacion, Libro libro, Usuario usuario, LocalDate fecha) {
+        this.identificador = contador++;
         this.tipoOperacion = tipoOperacion;
         this.libro = libro;
         this.usuario = usuario;
@@ -19,10 +20,6 @@ public class Operacion {
 
     public int getIdentificador() {
         return identificador;
-    }
-
-    public void setIdentificador(int identificador) {
-        this.identificador = identificador;
     }
 
     public String getTipoOperacion() {
@@ -59,8 +56,13 @@ public class Operacion {
 
     @Override
     public String toString() {
-        return "Operacion [identificador=" + identificador + ", tipoOperacion=" + tipoOperacion + ", libro=" + libro
-                + ", usuario=" + usuario + ", fecha=" + fecha + "]";
+         return "ID Operación: " + identificador +
+           "\nTipo Operacion: " + tipoOperacion +
+           "\nLibro: " + libro +
+           "\nUsuario: $" + usuario +
+           "\nFecha: " + fecha +
+           "\n********************************";
+
     }
 
     

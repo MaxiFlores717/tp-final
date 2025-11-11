@@ -4,16 +4,15 @@ public class Usuario {
     private int numeroUsuario;
     private int dni;
     private String nombre;
-    private String dirrecion;
+    private String direccion;
     private String telefono;
     private int cantidadLibrosPrestados;
     
-    public Usuario(int numeroUsuario, int dni, String nombre, String dirrecion, String telefono,
-            int cantidadLibrosPrestados) {
+    public Usuario(int numeroUsuario, int dni, String nombre, String direccion, String telefono,int cantidadLibrosPrestados) {
         this.numeroUsuario = numeroUsuario;
         this.dni = dni;
         this.nombre = nombre;
-        this.dirrecion = dirrecion;
+        this.direccion = direccion;
         this.telefono = telefono;
         this.cantidadLibrosPrestados = cantidadLibrosPrestados;
     }
@@ -42,12 +41,12 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getDirrecion() {
-        return dirrecion;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setDirrecion(String dirrecion) {
-        this.dirrecion = dirrecion;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getTelefono() {
@@ -68,8 +67,13 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario [numeroUsuario=" + numeroUsuario + ", dni=" + dni + ", nombre=" + nombre + ", dirrecion="
-                + dirrecion + ", telefono=" + telefono + ", cantidadLibrosPrestados=" + cantidadLibrosPrestados + "]";
+        return "Nro Usuario: " + numeroUsuario +
+           "\nDNI: " + dni +
+           "\nNombre: " + nombre +
+           "\nDireccion: $" + direccion +
+           "\nTelefono: " + telefono +
+           "\nCantidad Libros Prestados: " + cantidadLibrosPrestados +
+           "\n********************************";
     }
     
     

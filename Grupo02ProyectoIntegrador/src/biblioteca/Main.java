@@ -1,12 +1,11 @@
 package biblioteca;
 
-import backend.model.*;
 import backend.base.*;
 import backend.help.Helper;
-
+import backend.model.*;
 import java.time.LocalDate;
-import java.util.Scanner;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
 
@@ -17,8 +16,8 @@ public class Main {
 
     // Estructuras de datos para usuarios
     private static Usuario[] arregloUsuarios = new Usuario[1000];
-    private static int cantidadUsuarios = 0;
-
+    private static int cantidadUsuarios =0;
+    
     // Estructuras auxiliares
     private static StackGenerica<Operacion> acciones = new StackGenerica<>();
     private static Queue<Usuario> pendientes = new Queue<>();
@@ -37,41 +36,52 @@ public class Main {
                     registrarLibro();
                     break;
                 case 2:
-                    // Registro de usuarios
+                    registrarUsuario();
                     break;
                 case 3:
-                    // Busqueda de libros
+                    int codigoLibro = Helper.getPositiveInteger(sc,"Ingrese el código del libro: ");
+                    buscarLibro(codigoLibro);
                     break;
                 case 4:
-                    // Busqueda de usuario
-                    buscarUSuarios();
+                    int codigoUsuario = Helper.getPositiveInteger(sc,"Ingrese el código del usuario: ");
+                    buscarUsuarioPorCodigoEnArreglo(codigoUsuario);
                     break;
                 case 5:
-                    // Prestamo de libros
+                    prestamoDeLibros();
                     break;
                 case 6:
                     // Devolucion de libros
                     break;
                 case 7:
-                    // Reversion de operaciones
+                    reversionDeOperaciones();
                     break;
                 case 8:
-                    // Atencion de pendientes
+                    atenderPendientes(pendientes, arregloLibros, cantidadLibros, acciones);
                     break;
                 case 9:
-                    // Mostrar todos los libros
+                    mostrarTodosLosLibros();
                     break;
                 case 10:
                     mostrarTodosLosUsuarios();
                     break;
                 case 11:
-                    // Monto total de libros en prestamo
+                	double montoTotalDeLibrosPrestados=mostrarMontoTotalLibrosPrestados(arregloLibros);
+                	System.out.println("El monto total al que ascienden los libros que se encuentran en prestamo es: "+ montoTotalDeLibrosPrestados);
                     break;
                 case 12:
-                    // Lista de libros por autor
+                    String autor= Helper.validarString(sc,"Ingrese la subcadena del autor a buscar: "); 
+                    listarLibrosAutor(autor.toLowerCase());
                     break;
                 case 13:
-                    // Lista de usuarios con cantidad de libros prestados
+                    DoubleLinkedList<Usuario> usuariosConLibrosPrestados = listarUsuariosConLibrosPrestados(arregloUsuarios);
+                    if(usuariosConLibrosPrestados.size() == 0){
+                        System.out.println("No hay Usuarios con esa Cantidad de Libros Prestados. ");
+                    }else{
+                        System.out.println("Usuarios con mas Libros Prestados");
+                        for (Usuario usuario : usuariosConLibrosPrestados) {
+                            System.out.println(usuario.toString());
+                        }
+                    }
                     break;
                 case 0:
                     System.out.println("Saliendo del sistema...");
@@ -167,6 +177,147 @@ public class Main {
         return null;
     }
 
+    //Metodo 2 Registro de Usuario
+    public static void registrarUsuario() {
+        System.out.println("----Registro de Usuarios:----");
+        int nuevos = Helper.validarEntero(sc, "Ingrese cuántos usuarios desea ingresar: ");
+        if (cantidadUsuarios + nuevos > arregloUsuarios.length) {
+            System.out.println("Error: no hay espacio suficiente para registrar " + nuevos + " usuarios.");
+            return;
+        }
+        for (int i = 0; i < nuevos; i++) {
+            System.out.println("Usuario " + (cantidadUsuarios + i + 1) + ":");
+            int numUsuario;
+            do {
+                numUsuario = random.nextInt(100) + 1;
+            } while (buscarUsuarioPorCodigoEnArreglo(numUsuario) != null);
+            
+            int dniUsuario = Helper.validarDni(sc, "Ingrese el DNI del Usuario: ");
+            while (buscarUsuarioPorDni(dniUsuario) != null) {
+                System.out.println("Ese DNI ya está registrado. Intente con otro.");
+                dniUsuario = Helper.validarDni(sc, "Ingrese el DNI del Usuario: ");
+            }
+            String nombreUsuario = Helper.validarString(sc, "Ingrese el Nombre del Usuario: ");
+            String direccionUsuario = Helper.validarString(sc, "Ingrese la Dirección del Usuario: ");
+            String telefonoUsuario = Helper.validarString(sc, "Ingrese el Teléfono del Usuario: ");
+            int cantidadLibrosPrestados = 0;
+
+            arregloUsuarios[cantidadUsuarios + i] = new Usuario(
+                numUsuario, dniUsuario, nombreUsuario, direccionUsuario, telefonoUsuario, cantidadLibrosPrestados
+            );
+        }
+
+        cantidadUsuarios += nuevos;
+        System.out.println("El Registro de los usuario esta completado.");
+    }
+
+    //Metodo 3: Busqueda de libros //EN DUDA 
+    public static void buscarLibro(int codigoLibro){
+        System.out.println("----Busqueda de Libros:----");
+        Libro libroBuscar = new Libro(codigoLibro, "", "", 0.0,true); //libro temporal
+        Libro libroEncontrado = arbolLibros.buscar(libroBuscar);
+
+        if( libroEncontrado != null){
+            System.out.println("Libro encontrado:");
+            System.out.println(libroEncontrado.toString());
+        }else {
+            System.out.println("No se encontró ningun libro con ese código");
+        }
+    }
+
+    //metodo 4
+    public static Usuario buscarUsuarioPorCodigoEnArreglo(int numUsuario) {
+    	for (int i = 0; i < cantidadUsuarios; i++) {
+            if (arregloUsuarios[i] != null && arregloUsuarios[i].getNumeroUsuario() == numUsuario) {
+                return arregloUsuarios[i];
+            }
+        }
+        return null;
+    }
+    public static Usuario buscarUsuarioPorDni(int dni) {
+        for (int i = 0; i < cantidadUsuarios; i++) {
+            if (arregloUsuarios[i] != null && arregloUsuarios[i].getDni() == dni) {
+                return arregloUsuarios[i];
+            }
+        }
+        return null;
+    }
+
+    //Metodo 5: Prestamo de libros(falta terminar)
+    private static void prestamoDeLibros() {
+        
+    }
+
+    //Metodo 7: Reversion de operaciones en la pila acciones(de prestamo a devolucion y de devolucion a prestamo)
+    private static void reversionDeOperaciones(){
+        Operacion accion= acciones.pop();
+        if(accion.getTipoOperacion().equalsIgnoreCase("Prestamo")){
+            accion.setTipoOperacion("Devolucion");
+            acciones.push(accion);
+        }else if(accion.getTipoOperacion().equalsIgnoreCase("Devolucion")) {
+            accion.setTipoOperacion("Prestamo");
+            acciones.push(accion);
+        }
+    }
+
+    //Metodo 8: Atencion a Pendientes
+    private static void atenderPendientes(Queue<Usuario> pendientes, Libro[] arregloLibros, int cantidadLibros, StackGenerica<Operacion> acciones){
+        Scanner input = new Scanner(System.in);
+        if(pendientes.isEmpty()){
+            System.out.println("No hay usuarios en la cola de espera. ");
+            return;
+        }
+
+        int numeroUsuario = Helper.getPositiveInteger(input, "Ingrese el Numero del Usuario: ");
+        Queue<Usuario> auxiliar = new Queue<>();
+        Usuario encontrado = null;
+        while(!pendientes.isEmpty()){
+            Usuario usuario = pendientes.remove();
+            if(usuario.getNumeroUsuario() == numeroUsuario){
+                encontrado = usuario;
+                auxiliar.add(usuario);
+            }else{
+                auxiliar.add(usuario);
+            }
+        }
+
+        while(!auxiliar.isEmpty()){
+            pendientes.add(auxiliar.remove());
+        }
+        if(encontrado == null){
+            System.out.println("No se encontro al Usuario");
+            return;
+        }else{
+            System.out.println("Atendiendo a usuario: " + encontrado);
+        }
+
+        int codigoLibro = Helper.getPositiveInteger(input, "Ingrese el Codigo del Libro: ");
+        Libro libro = buscarLibroPorCodigoEnArreglo(codigoLibro);
+        if(libro == null){
+            System.out.println("Libro no Encontrado");
+            return;
+        }
+
+        if(!libro.isDisponible()){
+            System.out.println("Libro no Disponible. Usuario esta en la cola de Espera.");
+            return;
+        }
+
+        pendientes.remove();
+        libro.setDisponible(false);
+        encontrado.setCantidadLibrosPrestados(encontrado.getCantidadLibrosPrestados() + 1);
+        Operacion operacion = new Operacion("Prestamo", libro, encontrado, LocalDate.now());
+        acciones.push(operacion);
+        System.out.println("Prestamo registrado para Usuario atendido. ");
+    }
+
+    //Metodo 9: Mostrar todos los libros de la biblioteca
+    private static void mostrarTodosLosLibros(){
+        for (Libro libro : arregloLibros) {
+            System.out.println(libro);
+        }
+    }
+
     // Metodo 10: Mostrar la informacion de todos los usuarios
     private static void mostrarTodosLosUsuarios() {
         System.out.println("LISTADO DE TODOS LOS USUARIOS");
@@ -183,10 +334,11 @@ public class Main {
             Usuario usuario = arregloUsuarios[i];
             if (usuario != null) {
                 System.out.println("Usuario #" + (i + 1) + ":");
+             //   System.out.println(usuario.toString()); //NO CONVIENE HACER SOLAMENTE ESTA LINEA?
                 System.out.println("  Numero de Usuario: " + usuario.getNumeroUsuario());
                 System.out.println("  DNI: " + usuario.getDni());
                 System.out.println("  Nombre: " + usuario.getNombre());
-                System.out.println("  Direccion: " + usuario.getDirrecion());
+                System.out.println("  Direccion: " + usuario.getDireccion());
                 System.out.println("  Telefono: " + usuario.getTelefono());
                 System.out.println("  Cantidad de libros prestados: " + usuario.getCantidadLibrosPrestados());
                 System.out.println();
@@ -196,54 +348,65 @@ public class Main {
         System.out.println("--- Fin del listado ---");
     }
 
-    public static boolean buscarUSuarios() {
-        arregloUsuarios[0] = (new Usuario(0, 2112, "maxi", "puerto", "1331", 1));
-        arregloUsuarios[1] = (new Usuario(1, 2112, "aye", "puerto", "1331", 1));
-        arregloUsuarios[2] = (new Usuario(2, 2112, "jose", "puerto", "1331", 1));
-        arregloUsuarios[3] = (new Usuario(3, 2112, "juan", "puerto", "1331", 1));
-        cantidadUsuarios = 4;
-        System.out.println("BUSQUEDA DE USUARIO");
+    //Metodo 11 mostrar el monto total de los libros que se encuentran en prestamo
+    public static double mostrarMontoTotalLibrosPrestados(Libro[] arregloLibros) {
+    	if(arregloLibros == null || arregloLibros.length == 0) {
+    		System.out.println("No hay libros registrados.");
+    		return 0;
+    	}
+    	double montoTotalLibros=0;
+    	int cantidadPrestados=0;
+    	for (Libro libro : arregloLibros) {
+    		if(libro != null && !libro.isDisponible()) {
+    			montoTotalLibros+= libro.getPrecio();
+    			cantidadPrestados++;
+    		}
+		}
+    	if(cantidadPrestados==0) {
+    		System.out.println("No se encontraron libros prestados.");
+    		return 0;
+    	}else {
+    		System.out.println("Los libros que se encuentran en estado de prestamos son: "+ cantidadPrestados);
+    		return montoTotalLibros;
+    	}
+    }
 
-        if (cantidadUsuarios == 0) {
-            System.out.println("No hay usuarios registrados en la biblioteca.");
-            return false;
-        }
-
-        System.out.println("Ingrese numero de usuario: ");
-        int leer = sc.nextInt();
-
-        for (int i = 0; i < cantidadUsuarios; i++) {
-            Usuario usuario = arregloUsuarios[i];
-            if (usuario.getNumeroUsuario() == leer) {
-                System.out.println("Usuario Encontrado: ");
-                System.out.println("Usuario #" + (i + 1) + ":");
-                System.out.println("  Numero de Usuario: " + usuario.getNumeroUsuario());
-                System.out.println("  DNI: " + usuario.getDni());
-                System.out.println("  Nombre: " + usuario.getNombre());
-                System.out.println("  Direccion: " + usuario.getDirrecion());
-                System.out.println("  Telefono: " + usuario.getTelefono());
-                System.out.println("  Cantidad de libros prestados: " + usuario.getCantidadLibrosPrestados());
-                System.out.println();
-                return true;
+    //Metodo 12: crear una lista con los libros cuyo autor contenga una subcadena 
+    public static void listarLibrosAutor(String autor){
+        System.out.println("--- Listar Libros por Autor---");
+        int librosEncontrados = 0;
+        SimpleLinkedList<Libro> listaLibrosAutor = new SimpleLinkedList<>();
+        for(int i = 0; i < cantidadLibros; i++){
+            Libro libroActual = arregloLibros[i];
+            if(libroActual != null && libroActual.getAutor().toLowerCase().contains(autor.toLowerCase())){
+                listaLibrosAutor.addLast(libroActual);
+                librosEncontrados++;
             }
         }
-        return false;
+
+        if(listaLibrosAutor.size()==0){
+            System.out.println("No se encontraron libros que contengan: "+autor);
+        }else{
+            System.out.println("Libros encontrados: "+librosEncontrados+" que contienen: "+autor+"\n");
+            for(Libro libro : listaLibrosAutor){
+                System.out.println(libro.toString());
+            }
+        }
     }
 
-    //metodo 6: devolucion libro
-    public static void realizarDevolucion() {
+    //Metodo 13: Listar Usuarios que se Prestaron una x cantidad de Libros
+    private static DoubleLinkedList<Usuario> listarUsuariosConLibrosPrestados(Usuario[] arregloUsuarios){
+        Scanner input = new Scanner(System.in);
+        DoubleLinkedList<Usuario> listaUsuarios = new DoubleLinkedList<>();
+        int cantidadLibrosPrestados = Helper.getPositiveInteger(input, "Ingrese la Cantidada de Libros Prestados: ");
+        for(int i = 0; i < arregloUsuarios.length; i++){
+            if(arregloUsuarios[i] != null && arregloUsuarios[i].getCantidadLibrosPrestados() >= cantidadLibrosPrestados){
+                listaUsuarios.addFirst(arregloUsuarios[i]);
+            }
+        }
 
-        System.out.println("DEVOLUCION");
+        return listaUsuarios;
+    }    
 
-        boolean usuarioEncontrado= buscarUSuarios();
-
-        //boolean libroEncontrado= buscarLibro();
-
-
-        
-
-         
-        
-    }
 
 }

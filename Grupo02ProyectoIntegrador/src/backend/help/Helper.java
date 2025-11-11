@@ -226,6 +226,57 @@ public static Double getPositiveDouble(Scanner scanner, String inputMessage) {
     public static String[] getEnumNames(Class<? extends Enum<?>> e) {
         return Arrays.toString(e.getEnumConstants()).replaceAll("^.|.$", "").split(", ");
     }
-}
-    //endregion
+    public static int validarDni(Scanner input, String mensaje) {
+		int numero;
+		String valorIngresado;
+		while (true) {
+			try {
+				System.out.println(mensaje);
+				valorIngresado = input.nextLine();
+				numero = Integer.parseInt(valorIngresado);
+				if (valorIngresado.length() ==8) {
+					break;
+				}else {
+	                System.out.println("Error !!! el DNI debe tener 8 dígitos");
+				}
+			} catch (Exception e) {
+				System.out.println("Error !!! debe ingresar un numero");
+			}
+		}
+		return numero;
+	}
+    public static String validarString(Scanner input, String mensaje) {
+	    String valorIngresado;
 
+	    while (true) {
+	        System.out.println(mensaje);
+	        valorIngresado = input.nextLine();
+	        if (valorIngresado != null && valorIngresado.length() > 3) {
+	            break;
+	        } else {
+	            System.out.println("Error !!! debe ingresar un nombre con más de 3 caracteres");
+	        }
+	    }
+
+	    return valorIngresado;
+	}
+    public static int validarEntero(Scanner input, String mensaje) {
+        int numero;
+        String valorIngresado;
+        while (true) {
+            try {
+                System.out.println(mensaje);
+                valorIngresado = input.nextLine();
+                numero = Integer.parseInt(valorIngresado);
+                if (numero > 0) {
+                    return numero;
+                } else {
+                    System.out.println("Error !!! debe ingresar un número entero positivo mayor que 0");
+                }
+            } catch (Exception e) {
+                System.out.println("Error !!! debe ingresar un número entero válido");
+            }
+        }
+    }
+
+}
