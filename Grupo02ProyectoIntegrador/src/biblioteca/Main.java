@@ -357,10 +357,12 @@ public class Main {
         Operacion accion = acciones.pop();
         if (accion.getTipoOperacion().equalsIgnoreCase("Prestamo")) {
             accion.setTipoOperacion("Devolucion");
+            (accion.getLibro()).setDisponible(true);
             acciones.push(accion);
             System.out.println("La reversion de operacion fue exitosa");
         } else if (accion.getTipoOperacion().equalsIgnoreCase("Devolucion")) {
             accion.setTipoOperacion("Prestamo");
+            (accion.getLibro()).setDisponible(false);
             acciones.push(accion);
             System.out.println("La reversion de operacion fue exitosa");
         }
