@@ -75,6 +75,14 @@ public class Usuario {
            "\nCantidad Libros Prestados: " + cantidadLibrosPrestados +
            "\n********************************";
     }
+
+
+    //metodo decrementar para devolucion
+    public void decrementarPrestamos() {
+    if (cantidadLibrosPrestados > 0) {
+      cantidadLibrosPrestados--;
+    }
+  }
     
     
 }

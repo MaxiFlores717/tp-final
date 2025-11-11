@@ -149,6 +149,24 @@ public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends Binar
         }return null; //no lo encontro
     }
 
+
+    public Libro buscarPorCodigo(int codigo) {
+        return buscarRecursivoLibro(this.root, codigo);
+    }
+
+    private Libro buscarRecursivoLibro(BTNode<ELEMENT> nodo, int codigo) {
+        if (nodo == null)
+            return null;
+        else {
+            Libro libro = (Libro) nodo.item;
+            if (codigo == libro.getCodigo())
+                return libro;
+            if (codigo < libro.getCodigo())
+                return buscarRecursivoLibro(nodo.left, codigo);
+            return buscarRecursivoLibro(nodo.right, codigo);
+        }
+    }
+
     //recorremos inOrder 
     public void inOrder(Consumer<ELEMENT> action) {
         inOrder(this.root, action);

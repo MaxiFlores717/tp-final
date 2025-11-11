@@ -44,13 +44,13 @@ public class Main {
                     break;
                 case 4:
                     int codigoUsuario = Helper.getPositiveInteger(sc,"Ingrese el código del usuario: ");
-                    buscarUsuarioPorCodigoEnArreglo(codigoUsuario);
+                    buscarUsuarioPorDni(codigoUsuario);
                     break;
                 case 5:
                     prestamoDeLibros();
                     break;
                 case 6:
-                    // Devolucion de libros
+                    devolverLibro(sc);
                     break;
                 case 7:
                     reversionDeOperaciones();
@@ -208,7 +208,7 @@ public class Main {
         }
 
         cantidadUsuarios += nuevos;
-        System.out.println("El Registro de los usuario esta completado.");
+        System.out.println("El Registro de los usuario esta completado.");     
     }
 
     //Metodo 3: Busqueda de libros //EN DUDA 
@@ -247,6 +247,39 @@ public class Main {
     private static void prestamoDeLibros() {
         
     }
+
+    //Metodo 6: devolver libro
+    public static void devolverLibro(Scanner sc) {
+        System.out.print("Número de usuario: ");
+        int nroUsuario = sc.nextInt();
+        System.out.print("Código de libro: ");
+        int codigoLibro = sc.nextInt();
+        sc.nextLine();
+
+        Usuario usuario = buscarUsuarioPorDni(nroUsuario);
+        Libro libro = arbolLibros.buscarPorCodigo(codigoLibro);
+        usuario.setCantidadLibrosPrestados(1);
+
+        libro.setDisponible(false);
+
+        if (usuario != null && libro != null) {
+            if (!libro.isDisponible()) {
+                libro.setDisponible(true);
+                usuario.decrementarPrestamos();
+                acciones.push(new Operacion("Devolucion", libro, usuario, LocalDate.now()));
+                System.out.println("Devolución realizada.");
+                System.out.println(usuario.getCantidadLibrosPrestados() +"   "+ libro.toString());
+            } else {
+                System.out.println("Ese libro ya estaba disponible.");
+            }
+        } else if(usuario == null){
+            System.out.println("Usuario no encontrado.");
+        }else if(libro ==null){
+            System.out.println("libro no encontrado");
+        }
+    }
+
+    
 
     //Metodo 7: Reversion de operaciones en la pila acciones(de prestamo a devolucion y de devolucion a prestamo)
     private static void reversionDeOperaciones(){
