@@ -232,7 +232,7 @@ public class Main {
             do {
                 numUsuario = random.nextInt(100) + 1;
             } while (buscarUsuarioPorCodigoEnArreglo(numUsuario) != null);
-            
+            System.out.println("El codigo del usuario es: "+numUsuario);
             int dniUsuario = Helper.validarDni(sc, "Ingrese el DNI del Usuario: ");
             while (buscarUsuarioPorDni(dniUsuario) != null) {
                 System.out.println("Ese DNI ya está registrado. Intente con otro.");
