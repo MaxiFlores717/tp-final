@@ -359,11 +359,13 @@ public class Main {
             accion.setTipoOperacion("Devolucion");
             (accion.getLibro()).setDisponible(true);
             acciones.push(accion);
+            accion.getUsuario().decrementarPrestamos();
             System.out.println("La reversion de operacion fue exitosa");
         } else if (accion.getTipoOperacion().equalsIgnoreCase("Devolucion")) {
             accion.setTipoOperacion("Prestamo");
             (accion.getLibro()).setDisponible(false);
             acciones.push(accion);
+            accion.getUsuario().setCantidadLibrosPrestados(accion.getUsuario().getCantidadLibrosPrestados()+1);
             System.out.println("La reversion de operacion fue exitosa");
         }
     }
