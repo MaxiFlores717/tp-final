@@ -39,7 +39,8 @@ public class Main {
                     registrarUsuario();
                     break;
                 case 3:
-                    // Busqueda de libros 
+                    int codigoLibro = Helper.getPositiveInteger(sc,"Ingrese el código del libro: ");
+                    buscarLibro(codigoLibro);
                     break;
                 case 4:
                     // Busqueda de usuario 
@@ -67,7 +68,8 @@ public class Main {
                 	System.out.println("El monto total al que ascienden los libros que se encuentran en prestamo es: "+ montoTotalDeLibrosPrestados);
                     break;
                 case 12:
-                    // Lista de libros por autor 
+                    String autor= Helper.validarString(sc,"Ingrese la subcadena del autor a buscar: "); 
+                    listarLibrosAutor(autor.toLowerCase());
                     break;
                 case 13:
                     DoubleLinkedList<Usuario> usuariosConLibrosPrestados = listarUsuariosConLibrosPrestados(arregloUsuarios);
@@ -205,7 +207,21 @@ public class Main {
         System.out.println("El Registro de los usuario esta completado.");
     }
 
+    //Metodo 3: Busqueda de libros //EN DUDA 
+    public static void buscarLibro(int codigoLibro){
+        System.out.println("----Busqueda de Libros:----");
+        Libro libroBuscar = new Libro(codigoLibro, "", "", 0.0,true); //libro temporal
+        Libro libroEncontrado = arbolLibros.buscar(libroBuscar);
 
+        if( libroEncontrado != null){
+            System.out.println("Libro encontrado:");
+            System.out.println(libroEncontrado.toString());
+        }else {
+            System.out.println("No se encontró ningun libro con ese código");
+        }
+    }
+
+    //
     public static Usuario buscarUsuarioPorCodigoEnArreglo(int numUsuario) {
     	for (int i = 0; i < cantidadUsuarios; i++) {
             if (arregloUsuarios[i] != null && arregloUsuarios[i].getNumeroUsuario() == numUsuario) {
@@ -314,10 +330,11 @@ public class Main {
             Usuario usuario = arregloUsuarios[i];
             if (usuario != null) {
                 System.out.println("Usuario #" + (i + 1) + ":");
+             //   System.out.println(usuario.toString()); //NO CONVIENE HACER SOLAMENTE ESTA LINEA?
                 System.out.println("  Numero de Usuario: " + usuario.getNumeroUsuario());
                 System.out.println("  DNI: " + usuario.getDni());
                 System.out.println("  Nombre: " + usuario.getNombre());
-                System.out.println("  Direccion: " + usuario.getDirrecion());
+                System.out.println("  Direccion: " + usuario.getDireccion());
                 System.out.println("  Telefono: " + usuario.getTelefono());
                 System.out.println("  Cantidad de libros prestados: " + usuario.getCantidadLibrosPrestados());
                 System.out.println();
@@ -350,6 +367,29 @@ public class Main {
     	}
     }
 
+    //Metodo 12: crear una lista con los libros cuyo autor contenga una subcadena 
+    public static void listarLibrosAutor(String autor){
+        System.out.println("--- Listar Libros por Autor---");
+        int librosEncontrados = 0;
+        SimpleLinkedList<Libro> listaLibrosAutor = new SimpleLinkedList<>();
+        for(int i = 0; i < cantidadLibros; i++){
+            Libro libroActual = arregloLibros[i];
+            if(libroActual != null && libroActual.getAutor().toLowerCase().contains(autor.toLowerCase())){
+                listaLibrosAutor.addLast(libroActual);
+                librosEncontrados++;
+            }
+        }
+
+        if(listaLibrosAutor.size()==0){
+            System.out.println("No se encontraron libros que contengan: "+autor);
+        }else{
+            System.out.println("Libros encontrados: "+librosEncontrados+" que contienen: "+autor+"\n");
+            for(Libro libro : listaLibrosAutor){
+                System.out.println(libro.toString());
+            }
+        }
+    }
+
     //Metodo 13: Listar Usuarios que se Prestaron una x cantidad de Libros
     private static DoubleLinkedList<Usuario> listarUsuariosConLibrosPrestados(Usuario[] arregloUsuarios){
         Scanner input = new Scanner(System.in);
@@ -363,6 +403,8 @@ public class Main {
 
         return listaUsuarios;
     }    
+
+
 }
 
 

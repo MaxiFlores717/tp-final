@@ -1,5 +1,9 @@
 package backend.base;
 
+import java.util.function.Consumer;
+
+import backend.model.Libro;
+
 public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends BinaryTree<ELEMENT> {
  
  
@@ -88,7 +92,7 @@ public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends Binar
         }
         return save;
     }
- 
+
  
     private ELEMENT removeByFusion(ELEMENT item) {
         BTNode<ELEMENT> find = this.root;
@@ -131,6 +135,35 @@ public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends Binar
         }
         find.left = find.right = null;
         return save;
+    }
+
+
+    //metodo para buscar el libro por codigo
+    public ELEMENT buscar(ELEMENT item){
+        BTNode<ELEMENT> actual = this.root; //iniciamos en la raiz
+        while(actual != null){
+            int comparacion = item.compareTo(actual.item);
+            if(comparacion == 0){
+                return actual.item; 
+            }else if (comparacion < 0){
+                actual = actual.left; //va a la izq
+            }else{
+                actual = actual.right;//va a la der
+            }
+        }return null; //no lo encontro
+    }
+
+    //recorremos inOrder 
+    public void inOrder(Consumer<ELEMENT> action) {
+        inOrder(this.root, action);
+    }
+
+    private void inOrder(BTNode<ELEMENT> nodo, Consumer<ELEMENT> action) {
+        if (nodo != null) {
+            inOrder(nodo.left, action);
+            action.accept(nodo.item);
+            inOrder(nodo.right, action);
+        }
     }
  
 }

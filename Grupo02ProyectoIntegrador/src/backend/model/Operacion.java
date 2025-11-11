@@ -56,8 +56,13 @@ public class Operacion {
 
     @Override
     public String toString() {
-        return "Operacion [identificador=" + identificador + ", tipoOperacion=" + tipoOperacion + ", libro=" + libro
-                + ", usuario=" + usuario + ", fecha=" + fecha + "]";
+         return "ID Operación: " + identificador +
+           "\nTipo Operacion: " + tipoOperacion +
+           "\nLibro: " + libro +
+           "\nUsuario: $" + usuario +
+           "\nFecha: " + fecha +
+           "\n********************************";
+
     }
 
     
