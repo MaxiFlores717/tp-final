@@ -305,7 +305,7 @@ public class Main {
     }
 
     //Metodo 6: devolver libro
-    public static void devolverLibro() {
+    public static void devolverLibro(Scanner sc) {
         System.out.print("Número de dni de usuario: ");
         int dniUsuario = sc.nextInt();
         System.out.print("Código de libro: ");
@@ -350,7 +350,7 @@ public class Main {
     }
 
     //Metodo 8: Atencion a Pendientes
-    private static void atenderPendientes(){
+    private static void atenderPendientes(Queue<Usuario> pendientes, Libro[] arregloLibros, int cantidadLibros, StackGenerica<Operacion> acciones){
         if(pendientes.isEmpty()){
             System.out.println("No hay usuarios en la cola de espera. ");
             return;
@@ -484,7 +484,7 @@ public class Main {
     }
 
     //Metodo 13: Listar Usuarios que se Prestaron una x cantidad de Libros
-    private static DoubleLinkedList<Usuario> listarUsuariosConLibrosPrestados(){
+    private static DoubleLinkedList<Usuario> listarUsuariosConLibrosPrestados(Usuario[] arrelgUsuarios){
         Scanner input = new Scanner(System.in);
         DoubleLinkedList<Usuario> listaUsuarios = new DoubleLinkedList<>();
         int cantidadLibrosPrestados = Helper.getPositiveInteger(input, "Ingrese la Cantidada de Libros Prestados: ");
