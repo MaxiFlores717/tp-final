@@ -312,6 +312,7 @@ public class Main {
         if (libro.isDisponible() == true) { // Si el libro esta disponible, se crea un objeto operacion que se guardara
                                             // en la lsta acciones
             usuario.incrementarLibrosPrestados();
+            libro.setDisponible(false);
             Operacion operacion = new Operacion("Prestamo", libro, usuario, LocalDate.parse(fecha));
             acciones.push(operacion);
             System.out.println("La operacion de prestamo aceptado");
@@ -328,7 +329,7 @@ public class Main {
     public static void devolverLibro(Scanner sc) {
 
         int codigoUsuario = Helper.getPositiveInteger(sc, "Ingrese el código del usuario: ");
-        int codigoLibro = Helper.getPositiveInteger(sc, "Ingrese el código del usuario: ");
+        int codigoLibro = Helper.getPositiveInteger(sc, "Ingrese el código del libro: ");
 
         Usuario usuario = buscarUsuarioPorCodigoEnArreglo(codigoUsuario);
         Libro libro = arbolLibros.buscarPorCodigo(codigoLibro);
@@ -340,7 +341,6 @@ public class Main {
                 usuario.decrementarPrestamos();
                 acciones.push(new Operacion("Devolucion", libro, usuario, LocalDate.now()));
                 System.out.println("Devolución realizada.");
-                System.out.println(usuario.getCantidadLibrosPrestados() + "   " + libro.toString());
             } else {
                 System.out.println("Ese libro ya estaba disponible.");
             }
