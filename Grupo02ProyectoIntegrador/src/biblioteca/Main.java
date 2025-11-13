@@ -71,7 +71,7 @@ public class Main {
                     reversionDeOperaciones();
                     break;
                 case 5:
-                    atenderPendientes(pendientes, arregloLibros, cantidadLibros, acciones);
+                    atenderPendientes(pendientes, acciones);
                     break;
                 case 6:
                     int opcionSuplementaria;
@@ -371,55 +371,55 @@ public class Main {
     }
 
     // Metodo 8: Atencion a Pendientes
-    private static void atenderPendientes(Queue<Usuario> pendientes, Libro[] arregloLibros, int cantidadLibros,
-            StackGenerica<Operacion> acciones) {
+    private static void atenderPendientes(Queue<Usuario> pendientes, StackGenerica<Operacion> acciones) {
+	    Scanner input = new Scanner(System.in);
         if (pendientes.isEmpty()) {
-            System.out.println("No hay usuarios en la cola de espera. ");
-            return;
-        }
+	        System.out.println("No hay usuarios en la cola de espera.");
+	        return;
+	    }
 
-        int numeroUsuario = Helper.getPositiveInteger(sc, "Ingrese el Numero del Usuario: ");
-        Queue<Usuario> auxiliar = new Queue<>();
-        Usuario encontrado = null;
-        while (!pendientes.isEmpty()) {
-            Usuario usuario = pendientes.remove();
-            if (usuario.getNumeroUsuario() == numeroUsuario) {
-                encontrado = usuario;
-                auxiliar.add(usuario);
-            } else {
-                auxiliar.add(usuario);
-            }
-        }
+	    int numeroUsuario = Helper.getPositiveInteger(input, "Ingrese el Numero del Usuario: ");
+	    Queue<Usuario> auxiliar = new Queue<>();
+	    Usuario encontrado = null;
+	    while (!pendientes.isEmpty()) {
+	        Usuario usuario = pendientes.remove();
+	        if (usuario.getNumeroUsuario() == numeroUsuario) {
+	            encontrado = usuario;
+	            break;
+	        } else {
+	            auxiliar.add(usuario);
+	        }
+	    }
 
-        while (!auxiliar.isEmpty()) {
-            pendientes.add(auxiliar.remove());
-        }
-        if (encontrado == null) {
-            System.out.println("No se encontro al Usuario");
-            return;
-        } else {
-            System.out.println("Atendiendo a usuario: " + encontrado);
-        }
+	    while (!auxiliar.isEmpty()) {
+	        pendientes.add(auxiliar.remove());
+	    }
+	    if (encontrado == null) {
+	        System.out.println("No se encontró al usuario.");
+	        return;
+	    }
+	    System.out.println("Atendiendo a usuario: " + encontrado);
 
-        int codigoLibro = Helper.getPositiveInteger(sc, "Ingrese el Codigo del Libro: ");
-        Libro libro = buscarLibroPorCodigoEnArreglo(codigoLibro);
-        if (libro == null) {
-            System.out.println("Libro no Encontrado");
-            return;
-        }
+	    int codigoLibro = Helper.getPositiveInteger(input, "Ingrese el Código del Libro: ");
+	    Libro libro = buscarLibroPorCodigoEnArreglo(codigoLibro);
+	    if (libro == null) {
+	        System.out.println("Libro no encontrado.");
+	        pendientes.add(encontrado);
+	        return;
+	    }
+	    if (!libro.isDisponible()) {
+	        System.out.println("Libro no disponible. Usuario queda en la cola de espera.");
+	        pendientes.add(encontrado);
+	        return;
+	    }
 
-        if (!libro.isDisponible()) {
-            System.out.println("Libro no Disponible. Usuario esta en la cola de Espera.");
-            return;
-        }
+	    libro.setDisponible(false);
+	    encontrado.setCantidadLibrosPrestados(encontrado.getCantidadLibrosPrestados() + 1);
+	    Operacion operacion = new Operacion("Préstamo", libro, encontrado, LocalDate.now());
+	    acciones.push(operacion);
 
-        pendientes.remove();
-        libro.setDisponible(false);
-        encontrado.setCantidadLibrosPrestados(encontrado.getCantidadLibrosPrestados() + 1);
-        Operacion operacion = new Operacion("Prestamo", libro, encontrado, LocalDate.now());
-        acciones.push(operacion);
-        System.out.println("Prestamo registrado para Usuario atendido. ");
-    }
+	    System.out.println("Préstamo registrado. Usuario atendido correctamente.");
+	}
 
     // Metodo 9: Mostrar todos los libros de la biblioteca
     private static void mostrarTodosLosLibros() {
@@ -507,7 +507,7 @@ public class Main {
     }
 
     // Metodo 13: Listar Usuarios que se Prestaron una x cantidad de Libros
-    private static DoubleLinkedList<Usuario> listarUsuariosConLibrosPrestados(Usuario[] arrelgUsuarios) {
+    private static DoubleLinkedList<Usuario> listarUsuariosConLibrosPrestados(Usuario[] arregloUsuarios) {
         Scanner input = new Scanner(System.in);
         DoubleLinkedList<Usuario> listaUsuarios = new DoubleLinkedList<>();
         int cantidadLibrosPrestados = Helper.getPositiveInteger(input, "Ingrese la Cantidada de Libros Prestados: ");
