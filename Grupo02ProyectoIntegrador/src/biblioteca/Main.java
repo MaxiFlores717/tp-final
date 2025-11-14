@@ -376,22 +376,7 @@ public class Main {
 	        return;
 	    }
 
-	    int numeroUsuario = Helper.getPositiveInteger(input, "Ingrese el Numero del Usuario: ");
-	    Queue<Usuario> auxiliar = new Queue<>();
-	    Usuario encontrado = null;
-	    while (!pendientes.isEmpty()) {
-	        Usuario usuario = pendientes.remove();
-	        if (usuario.getNumeroUsuario() == numeroUsuario) {
-	            encontrado = usuario;
-	            break;
-	        } else {
-	            auxiliar.add(usuario);
-	        }
-	    }
-
-	    while (!auxiliar.isEmpty()) {
-	        pendientes.add(auxiliar.remove());
-	    }
+	    Usuario encontrado = pendientes.remove();
 	    if (encontrado == null) {
 	        System.out.println("No se encontró al usuario.");
 	        return;
@@ -399,21 +384,22 @@ public class Main {
 	    System.out.println("Atendiendo a usuario: " + encontrado);
 
 	    int codigoLibro = Helper.getPositiveInteger(input, "Ingrese el Código del Libro: ");
-	    Libro libro = buscarLibroPorCodigoEnArreglo(codigoLibro);
-	    if (libro == null) {
+	    Libro libroBuscar = new Libro(codigoLibro, "", "", 0.0, true); // libro temporal
+        Libro libroEncontrado = arbolLibros.buscar(libroBuscar);
+	    if (libroEncontrado == null) {
 	        System.out.println("Libro no encontrado.");
 	        pendientes.add(encontrado);
 	        return;
 	    }
-	    if (!libro.isDisponible()) {
+	    if (!libroEncontrado.isDisponible()) {
 	        System.out.println("Libro no disponible. Usuario queda en la cola de espera.");
 	        pendientes.add(encontrado);
 	        return;
 	    }
 
-	    libro.setDisponible(false);
+	    libroEncontrado.setDisponible(false);
 	    encontrado.setCantidadLibrosPrestados(encontrado.getCantidadLibrosPrestados() + 1);
-	    Operacion operacion = new Operacion("Préstamo", libro, encontrado, LocalDate.now());
+	    Operacion operacion = new Operacion("Préstamo", libroEncontrado, encontrado, LocalDate.now());
 	    acciones.push(operacion);
 
 	    System.out.println("Préstamo registrado. Usuario atendido correctamente.");
