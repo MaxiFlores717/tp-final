@@ -86,10 +86,8 @@ public class Main {
                                 mostrarTodosLosUsuarios();
                                 break;
                             case 3:
-                                double montoTotalDeLibrosPrestados = mostrarMontoTotalLibrosPrestados(arregloLibros);
-                                System.out.println(
-                                        "El monto total al que ascienden los libros que se encuentran en prestamo es: "
-                                                + montoTotalDeLibrosPrestados);
+                                double montoTotalDeLibrosPrestados = mostrarMontoTotalLibrosPrestados(acciones);
+                                System.out.println("El monto total al que ascienden los libros que se encuentran en préstamo en un momento dado es: "+ montoTotalDeLibrosPrestados);
                                 break;
                             case 4:
                                 String autor = Helper.validarString(sc, "Ingrese la subcadena del autor a buscar: ");
@@ -461,24 +459,32 @@ public class Main {
     }
 
     // Metodo 11 mostrar el monto total de los libros que se encuentran en prestamo
-    public static double mostrarMontoTotalLibrosPrestados(Libro[] arregloLibros) {
-        if (arregloLibros == null || arregloLibros.length == 0) {
-            System.out.println("No hay libros registrados.");
+    public static double mostrarMontoTotalLibrosPrestados( StackGenerica<Operacion> acciones) {
+    	StackGenerica<Operacion> pilaAuxiliar = new StackGenerica<>();
+        double montoTotalLibros = 0;
+        int cantidadLibrosPrestados = 0;
+
+        if (acciones.isEmpty()) {
+            System.out.println("No hay operaciones registradas pila de acciones.");
             return 0;
         }
-        double montoTotalLibros = 0;
-        int cantidadPrestados = 0;
-        for (Libro libro : arregloLibros) {
-            if (libro != null && !libro.isDisponible()) {
-                montoTotalLibros += libro.getPrecio();
-                cantidadPrestados++;
+        while (!acciones.isEmpty()) {
+            Operacion operacion = acciones.pop(); 
+            pilaAuxiliar.push(operacion);        
+            if (operacion.getTipoOperacion().equalsIgnoreCase("Prestamo")) {
+                montoTotalLibros += operacion.getLibro().getPrecio();
+                cantidadLibrosPrestados++;
             }
         }
-        if (cantidadPrestados == 0) {
-            System.out.println("No se encontraron libros prestados.");
+        while (!pilaAuxiliar.isEmpty()) {
+            acciones.push(pilaAuxiliar.pop()); 
+        }
+
+        if (cantidadLibrosPrestados == 0) {
+            System.out.println("No se encontraron libros en préstamo en la pila Acciones.");
             return 0;
         } else {
-            System.out.println("Los libros que se encuentran en estado de prestamos son: " + cantidadPrestados);
+            System.out.println("La cantidad de libros en prestamos es: " + cantidadLibrosPrestados);
             return montoTotalLibros;
         }
     }
