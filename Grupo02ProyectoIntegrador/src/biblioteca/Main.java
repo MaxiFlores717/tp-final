@@ -165,7 +165,8 @@ public class Main {
         boolean codigoUnico = false;
         do {
             codigo = random.nextInt(9000) + 1000; // Codigo entre 1000 y 9999
-            if (buscarLibroPorCodigoEnArreglo(codigo) == null) {
+            Libro libroTemporal = new Libro(codigo, "", "", 0.0, true);
+            if (arbolLibros.buscar(libroTemporal) == null) {
                 codigoUnico = true;
             }
         } while (!codigoUnico);
@@ -195,17 +196,10 @@ public class Main {
         cantidadLibros++;
 
         // Agregar al arbol binario de busqueda
-        try {
-            arbolLibros.add(nuevoLibro);
-            System.out.println("Libro registrado exitosamente!");
-            System.out.println("Informacion del libro:");
-            System.out.println(nuevoLibro.toString());
-        } catch (Exception e) {
-            // Si hay error al agregar al arbol, revertir el arreglo
-            cantidadLibros--;
-            arregloLibros[cantidadLibros] = null;
-            System.out.println("Error al registrar el libro en el árbol: " + e.getMessage());
-        }
+        arbolLibros.add(nuevoLibro);
+        System.out.println("Libro registrado exitosamente!");
+        System.out.println("Informacion del libro:");
+        System.out.println(nuevoLibro.toString());
 
         System.out.println(arbolLibros.toString());
     }
